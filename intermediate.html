@@ -24,8 +24,9 @@
                 document.body.appendChild(iframe);
 
                 // Write to the iframe to set the Referer and perform the redirect
-                iframe.contentWindow.document.open();
-                iframe.contentWindow.document.write(`
+                var iframeDoc = iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(`
                     <html>
                     <head>
                         <meta http-equiv="refresh" content="0; url='${targetUrl}'">
@@ -41,7 +42,7 @@
                     </body>
                     </html>
                 `);
-                iframe.contentWindow.document.close();
+                iframeDoc.close();
             } else {
                 document.body.innerHTML = 'Payload is missing.';
             }
