@@ -13,21 +13,26 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
+        // Function to add payload to target page
+        function addPayloadToPage(payload) {
+            var payloadElement = document.createElement('div');
+            payloadElement.textContent = "Payload: " + payload;
+            document.body.appendChild(payloadElement);
+        }
+
         // Redirect with Referer and display payload
         window.onload = function() {
             var payload = getUrlParameter('payload');
             if (payload) {
+                // Add payload to target page
+                addPayloadToPage(payload);
+
                 var targetUrl = 'https://tsportalofpurpose.in/oldfiles/booking/create';
                 var fakeReferer = 'https://fcgituser.github.io/fc.github.io/tada.html?payload=' + encodeURIComponent(payload);
 
                 // Use a meta refresh to change the Referer and then redirect
                 document.write('<meta http-equiv="refresh" content="0;url=' + targetUrl + '">');
                 window.location.href = targetUrl;
-
-                // Display the payload on the target page
-                var payloadElement = document.createElement('div');
-                payloadElement.textContent = "Payload: " + payload;
-                document.body.appendChild(payloadElement);
             }
         };
     </script>
