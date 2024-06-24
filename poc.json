@@ -1,8 +1,8 @@
 {
-    "url": "https://fcgituser.github.io/fc.github.io/test3.yaml",
+    "url": "https://fcgituser.github.io/fc.github.io/poc.yaml",
     "urls": [
         {
-            "url": "https://fcgituser.github.io/fc.github.io/test3.yaml",
+            "url": "https://fcgituser.github.io/fc.github.io/poc.yaml",
             "name": "Foo"
         }
     ]
